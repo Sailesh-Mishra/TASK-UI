@@ -1,0 +1,36 @@
+<h2>My Tasks</h2>
+<button type="button" (click)="logout()">Logout</button>
+<button routerLink="/tasks/new">+ New task</button>
+
+<label>
+    Status
+    <select #statusSelect (change)="onStatusChange(statusSelect.value)">
+        <option value="">All</option>
+        <option value="todo">Todo</option>
+        <option value="in_progress">In progress</option>
+        <option value="done">Done</option>
+    </select>
+</label>
+
+@if (loading()) {
+<p>Loading...</p>
+} @else if (error()) {
+<p class="error">{{ error() }}</p>
+} @else {
+<ul>
+    @for (task of tasks(); track task.id) {
+    <li>
+        <strong>{{ task.title }}</strong> - {{ task.status }}
+        @if (task.owner) { <em>(owner: {{ task.owner }})</em> }
+        <a [routerLink]="['/tasks', task.id, 'edit']">Edit</a>
+        <button type="button" (click)="remove(task)">Delete</button>
+    </li>
+    } @empty {
+    <li>No tasks found.</li>
+    }
+</ul>
+
+<button type="button" (click)="goTo(page() - 1)" [disabled]="page() === 1">Previous</button>
+<span>Page {{ page() }} of {{ lastPage() }}</span>
+<button type="button" (click)="goTo(page() + 1)" [disabled]="page() === lastPage()">Next</button>
+}

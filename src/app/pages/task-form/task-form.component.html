@@ -1,0 +1,34 @@
+<h2>{{ taskId ? 'Edit task' : 'New task' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div>
+    <label for="title">Title</label>
+    <input id="title" formControlName="title" />
+    @if (form.controls.title.touched && form.controls.title.errors; as e) {
+      @if (e['required']) { <small>Title is required.</small> }
+      @if (e['maxlength']) { <small>Title is too long.</small> }
+      @if (e['server']) { <small>{{ e['server'] }}</small> }
+    }
+  </div>
+
+  <div>
+    <label for="description">Description</label>
+    <textarea id="description" formControlName="description"></textarea>
+    @if (form.controls.description.touched && form.controls.description.errors; as e) {
+      @if (e['maxlength']) { <small>Description is too long.</small> }
+      @if (e['server']) { <small>{{ e['server'] }}</small> }
+    }
+  </div>
+
+  <div>
+    <label for="status">Status</label>
+    <select id="status" formControlName="status">
+      <option value="todo">Todo</option>
+      <option value="in_progress">In progress</option>
+      <option value="done">Done</option>
+    </select>
+  </div>
+
+  <button type="submit" [disabled]="saving()">{{ saving() ? 'Saving...' : 'Save' }}</button>
+  <a routerLink="/tasks">Cancel</a>
+</form>
