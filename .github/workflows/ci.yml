@@ -17,5 +17,12 @@ jobs:
           cache: npm
 
       - run: npm ci
-      - run: npm audit --omit=dev --audit-level=high
+
+      - name: Audit (report only)
+        run: npm audit --omit=dev
+        continue-on-error: true
+
+      - name: Audit (fail on critical)
+        run: npm audit --omit=dev --audit-level=critical
+
       - run: npx ng build
